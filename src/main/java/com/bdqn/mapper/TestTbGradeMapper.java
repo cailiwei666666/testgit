@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-05-06
  */
 public interface TestTbGradeMapper extends BaseMapper<TestTbGrade> {
-
 }

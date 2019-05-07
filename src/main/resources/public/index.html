@@ -5,82 +5,88 @@
     <title>Title</title>
 </head>
 <body>
-<button>增加</button>
-<table border="1px" cellpadding="0" cellspacing="0">
-    <tr>
-        <td>学号</td>
-        <td>姓名</td>
-        <td>科目</td>
-        <td>成绩</td>
-        <td>操作</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del">删除</button></td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del">删除</button></td>
-    </tr>
-    <tr>
-        <td>14</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del">删除</button></td>
-    </tr>
-    <tr>
-        <td>11</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del">删除</button></td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del">删除</button></td>
-    </tr>
-    <tr>
-        <td>12</td>
-        <td>张三</td>
-        <td>语文</td>
-        <td>92</td>
-        <td><button>修改</button><button class="del" onclick="del(this)">删除</button></td>
-    </tr>
-</table>
-<script src="../static/js/jquery-1.12.4.min.js"></script>
+<a href="add.html">增加</a>
+<div>
+    <table border="1px" cellpadding="0" cellspacing="0">
+
+        <tr>
+            <td>学号</td>
+            <td>姓名</td>
+            <td>科目</td>
+            <td>成绩</td>
+            <td>操作</td>
+        </tr>
+
+        <tbody id="info">
+
+        </tbody>
+    </table>
+</div>
+
+<script src="js/jquery-3.2.1.js"></script>
 <script>
-    // $(function () {
-    //     $(".del").click(function () {
-    //         var id=$(".del").parent().parent().children().html();
-    //         alert(id);
-    //                         $(".del").parent().parent().remove();
 
-            // $.post("del","id:id",function (data) {
-            // if (data){
-            //     $(".del").parent().remove();
-            // } else{
-            //     alert("删除失败");
-            // }
-        // })
-    //     })
-    // })
-    function del(obj){
-        alert("asda")
-        var id=obj.parent().parent().children().html();
-            alert(id);
-                            obj.parent().parent().remove();
+    $(function () {
+        getInfo();
+        /*$("#sel").click(function () {
+            getInfo();
+        })*/
+    })
+
+    //查询
+    function getInfo() {
+        $("#info").html("");
+        $.ajax({
+            url: "/select",
+            dataType: "JSON",
+/*            data: {"title": title},*/
+            type: "POST",
+            success: function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    var tr = $("<tr></tr>");
+                    var td1 = $("<td>" + data[i].id + "</td>");
+                    var td2 = $("<td>" + data[i].userName + "</td>");
+                    var td3 = $("<td>" + data[i].course+ "</td>");
+                    var td4 = $("<td>" + data[i].score + "</td>");
+                    var td5 = $("<td><button href='javascript:void(0)' onclick='updInfo(" + data[i].id + ")'>修改</button>   <button href='javascript:void(0)' onclick='del(this)'>删除</button></td>");
+                    tr.append(td1);
+                    tr.append(td2);
+                    tr.append(td3);
+                    tr.append(td4);
+                    tr.append(td5);
+                    $("#info").append(tr);
+/*                    $("#info tr:even").css("background-color", "lightgreen");*/
+                }
+            },
+            error: function () {
+                alert("系统错误，请稍后重试");
+            }
+        })
     }
+function updInfo(num) {
+    location="edit.html?id="+num;
+}
 
+
+  
+
+
+
+    function del(obj){
+        var flag=confirm("确定要删除吗？");
+        if (flag){
+            var id=$(obj).parent().parent().children().html();
+            console.log(id);
+            $.post("del",{id:id},function (data) {
+                if (data) {
+                    $(obj).parent().parent().remove();
+                    alert("删除成功！");
+                } else {
+                    alert("删除失败");
+                }
+            })
+        }
+    }
 </script>
 </body>
 </html>

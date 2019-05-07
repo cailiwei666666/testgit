@@ -3,8 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="css/all.css"/>
 </head>
 <body>
-
+    <div class="div_kuang">
+        <strong>更新学生成绩</strong>
+        <form action="" method="post">
+            <table border="0" cellspacing="10" cellpadding="" width="400">
+                <tr>
+                    <td>学号：</td>
+                    <td><input type="text" id="id" name="id" value="" size="30" readonly/></td>
+                </tr>
+                <tr>
+                    <td>姓名：</td>
+                    <td><input type="text" id="userName" name="userName" value="" size="30" /></td>
+                </tr>
+                <tr>
+                    <td>科目：</td>
+                    <td>
+                        <select name="course" id="course">
+                            <option value="">-- 请选择 --</option>
+                            <option value="语文">语文</option>
+                            <option value="数学">数学</option>
+                            <option value="英语">英语</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>成绩：</td>
+                    <td><input type="text" id="score" name="score" value="" size="30" /></td>
+                </tr>
+            </table>
+            <input type="submit" value="提交" id="btn" />
+            <input type="reset" value="重置" />
+            <input type="button" value="返回" onclick="btnReturn()" />
+        </form>
+    </div>
 </body>
+<script src="js/jquery-3.2.1.js"></script>
+<script src="js/moment.min.js"></script>
+<script src="js/normal.js"></script>
+<script>
+    function btnReturn(){
+        location="index.html";
+    }
+    $(function () {
+        init();
+    })
+
+    var id = $.getHrefParam("id");
+    function init() {
+        $("#id").val(id);
+        $.ajax({
+            url:"/getById",
+            dataType:"JSON",
+            data:{"id":id},
+            type:"POST",
+            success:function (data) {
+                // alert("查找成功");
+                $("#userName").val(data.userName);
+                $("#course").val(data.course);
+                $("#score").val(data.score);
+            },
+            error:function () {
+                alert("系统错误");
+            }
+        })
+    }
+
+    $("#btn").click(function () {
+        var id = $("#id").val().trim();
+        var userName = $("#userName").val().trim();
+        var course = $("#course").val().trim();
+        var score = $("#score").val().trim();
+
+        if (id == "") {
+            alert("学号不能为空！")
+            $("#id").focus();
+            return false;
+        }
+        if (userName == "") {
+            alert("姓名不能为空！")
+            $("#userName").focus();
+            return false;
+        }
+        if (course == "") {
+            alert("请选择科目！")
+            $("#course").focus();
+            return false;
+        }
+        if (score == "") {
+            alert("成绩不能为空！")
+            $("#score").focus();
+            return false;
+        }
+
+        $.ajax({
+            url:"/updateById",
+            dataType:"text",
+            data:{"id":id,"userName":userName,"course":course,"score":score},
+            type:"POST",
+            success:function (data) {
+                alert("更新成功！");
+                location.href = "index.html";
+            },
+            error:function () {
+                alert("更新失败！");
+            }
+        })
+        return false;
+    })
+</script>
 </html>

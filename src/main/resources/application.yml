@@ -16,6 +16,10 @@ logging:
       bdqn:
         bookmanage:
           mapper : debug
+
+server:
+  #端口号
+  port: 8888
           #配置日志
 #  config: classpath:logback-boot.xml
 #pagehelper:

@@ -12,5 +12,4 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2019-05-06
  */
 public interface TestTbGradeService extends IService<TestTbGrade> {
-
 }

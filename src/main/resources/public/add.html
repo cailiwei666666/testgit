@@ -10,9 +10,9 @@
     <!-- name属性必须写 -->
     <form id="form" method="post">
         <table>
-            <td><input class="easyui-validatebox" type="hidden" id="id" name="id"><span id="judge"></span></td>
+            <!--<td><input class="easyui-validatebox" type="hidden" id="id" name="id"><span id="judge2"></span></td>-->
             <tr>
-                <td>姓名</td>
+                <td><label for="user_name">姓名</label></td>
                 <td><input type="text" id="user_name" name="user_code"><span id="judge"></span></td>
             </tr>
             <tr>
@@ -25,12 +25,15 @@
                 <td><input  type="text" name="score" id="score"></td>
             </tr>
         </table>
-        <input type="submit" id="btn" value="添加">
-        <input type="submit" value="返回" onclick="clos()">
+        <input type="button" id="btn" value="添加">
+        <input type="button" value="返回" onclick="clos()">
     </form>
 </div>
 </body>
 <script type="text/javascript">
+    function clos(){
+        location="index.html";
+    }
     $(function () {
         $("#btn").click(function () {
             var user_name = $("#user_name").val();
@@ -43,11 +46,16 @@
                 $.ajax({
                     url:"/addOne",
                     dataType:"text",
-                    data:{"user_name":user_name,"course":course,"score":score},
+                    data:{"userName":user_name,"course":course,"score":score},
                     type:"POST",
                     success:function (data) {
-                        alert("添加成功");
-                        window.location.href = "index.html";
+                        if (data){
+                            alert("添加成功");
+                            window.location.href = "index.html";
+                        } else{
+                            alert("添加失败");
+                        }
+
                     },
                     error:function () {
                         alert("系统错误");
